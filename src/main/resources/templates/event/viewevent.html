@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang = "en" 
+	  xmlns:th="http://www.thymeleaf.org" 
+	  th:replace="~{ fragments/layout :: layout ( ~{ ::body } ) }">
+<head>
+    <meta name="description"
+          content="toodoo - view an event">
+</head>
+<body>
+	<div class="card-deck">
+		<br>
+		<div th:replace="fragments/eventcard::card ( viewModel = ${eventViewModel} )"></div>
+	</div>
+</body>
+</html>

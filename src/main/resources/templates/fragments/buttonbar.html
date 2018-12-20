@@ -1,0 +1,26 @@
+<html lang = "en" 
+	  xmlns:th="http://www.thymeleaf.org">
+<body>
+	<div th:fragment="buttonbar (viewModel)">
+	
+		<br>
+		<div th:if="${viewModel.showUpdateButton}">
+			<div class="float-left">
+				<a class="btn btn-info btn-sm"
+					href="#"
+					th:href="@{'/events/' + ${viewModel.event.id} + '/update'}">
+					<i class="fas fa-edit"></i></a>
+			</div>
+		</div>
+		<div th:if="${viewModel.showDeleteButton}">
+			<div class="float-right">
+				<a class="btn btn-danger btn-sm"
+					href="#"
+					th:href="@{'/events/' + ${viewModel.event.id} + '/delete'}">
+					<i class="fas fa-times"></i></a>
+			</div>
+		</div>
+		
+	</div>
+</body>
+</html>

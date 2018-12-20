@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang = "en" 
+	  xmlns:th="http://www.thymeleaf.org" >
+	  <!-- th:replace="~{fragments/layout :: layout (~{::body}, 'home')}" -->
+<head>
+    <meta charset="utf-8">
+	<meta name="viewport"
+          content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description"
+          content="View a toodoo event">
+    <meta name="author"
+          content="Scott Hensen">
+          
+    <title>toodoo - event view</title>
+    
+    <link rel="icon" 
+		  th:href="@{/favicon.ico}" />		
+	<link rel="stylesheet" 
+		  th:href="@{/css/toodoo.css}">
+	<!-- Bootstrap CSS -->
+    <link rel="stylesheet" 
+          href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" 
+          integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" 
+          crossorigin="anonymous">	
+    <!-- Font Awesome icons -->
+    <link rel="stylesheet" 
+          href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" 
+    	  integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" 
+    	  crossorigin="anonymous">
+
+</head>
+<body>
+	<div class="container-fluid" style="margin-top: 20px;">
+		<!-- TODO: fragment ? -->
+		<nav class="navbar navbar-dark bg-dark">
+			<a class="navbar-brand" 
+				href='#'
+				th:href="@{'/events/view'}"> 
+			    <img src="/img/Bob2.jpg" width="30" height="30" alt="" th:href="@{/img/Bob2.jpg}">...toodoo</a>
+			<a class="btn btn-outline-info btn-sm"
+				href="#"
+				th:href="@{'/events/new'}">new
+				<i class="fas fa-plus"></i></a>
+		</nav>
+		
+		<div class="row justify-content-center">
+			<div class="card-deck">
+				<br>
+				<div class="card border-info mb-3" style="width: 18rem;">
+					<div class="card-body">
+						<h5 class="card-title"
+						    th:text="${eventViewModel.event.title}">title</h5>
+						<div class="row">
+							<div class="col"><b>Status</b></div>
+							<div class="col"><p th:text="${eventViewModel.event.status}">foo</p></div>
+						</div>
+						<div class="row">
+							<div class="col"><b>Priority</b></div>
+							<div class="col"><p th:text="${eventViewModel.event.priority}">foo</p></div>
+						</div>
+						<div class="row">
+							<div class="col"><b>Complete</b></div>
+							<div class="col"><p th:text="${eventViewModel.event.completePct}">foo</p></div>
+						</div>
+						
+						<!-- TODO: fragment ? -->
+						<div class="toodoo-button-bar">
+							<br>
+							<div th:if="${eventViewModel.showUpdateButton}">
+								<div class="float-left">
+									<a class="btn btn-info btn-sm"
+										href="#"
+										th:href="@{'/events/' + ${eventViewModel.event.id} + '/update'}">
+										<i class="fas fa-edit"></i></a>
+								</div>
+							</div>
+							<div th:if="${eventViewModel.showDeleteButton}">
+								<div class="float-right">
+									<a class="btn btn-danger btn-sm"
+										href="#"
+										th:href="@{'/events/' + ${eventViewModel.event.id} + '/delete'}">
+										<i class="fas fa-times"></i></a>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div th:if="${eventViewModel.hasError}">
+						<div class="card-footer message" 
+							th:attrappend="class=${'-' + eventViewModel.messageType}"
+							th:text="${eventViewModel.message}"></div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	<!------------------------------------------------------------
+	  Javascript (Placed at the end of page, so it'll load faster)
+	  jQuery first, then Popper.js, then Bootstrap JS
+	 ------------------------------------------------------------->	
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" 
+    	integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" 
+    	crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" 
+    	integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" 
+    	crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" 
+    	integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" 
+    	crossorigin="anonymous"></script>
+	<!-- 	  
+	<script src="foo"
+		  th:src="@{/js/jquery-slim.min.js}"></script>
+	<script src="bar"
+		  th:src="@{/js/bootstrap.min.js}"></script>	
+	-->
+	
+</body>
+</html>
