@@ -63,10 +63,10 @@ public class EventControllerTest
 				.andExpect(status().isOk())
 				.andExpect(view().name("/event/viewevents"))
 				.andExpect(model().attributeExists("eventsViewModel"))
-				.andExpect(model().attribute("eventsViewModel", hasProperty("eventViewModels", hasItem(hasProperty("showEditButton",   is(true))))))
-				.andExpect(model().attribute("eventsViewModel", hasProperty("eventViewModels", hasItem(hasProperty("showDeleteButton", is(true))))))
-				.andExpect(model().attribute("eventsViewModel", hasProperty("eventViewModels", hasItem(hasProperty("message",          is(""))))))
-				.andExpect(model().attribute("eventsViewModel", hasProperty("eventViewModels", hasItem(hasProperty("messageType",      is("default"))))))
+				.andExpect(model().attribute("eventsViewModel", hasProperty("eventViewModels", hasItem(hasProperty("showUpdateButton", is(true)      )))))
+				.andExpect(model().attribute("eventsViewModel", hasProperty("eventViewModels", hasItem(hasProperty("showDeleteButton", is(true)      )))))
+				.andExpect(model().attribute("eventsViewModel", hasProperty("eventViewModels", hasItem(hasProperty("message",          is("")        )))))
+				.andExpect(model().attribute("eventsViewModel", hasProperty("eventViewModels", hasItem(hasProperty("messageType",      is("default") )))))
 				;
 	}
 	
@@ -85,7 +85,7 @@ public class EventControllerTest
 				.andExpect(status().isOk())
 				.andExpect(view().name("/event/viewevent"))
 				.andExpect(model().attributeExists("eventViewModel"))
-				.andExpect(model().attribute("eventViewModel", hasProperty("showEditButton",   is(true))))
+				.andExpect(model().attribute("eventViewModel", hasProperty("showUpdateButton", is(true))))
 				.andExpect(model().attribute("eventViewModel", hasProperty("showDeleteButton", is(true))))
 				.andExpect(model().attribute("eventViewModel", hasProperty("message",          is(""))))
 				.andExpect(model().attribute("eventViewModel", hasProperty("messageType",      is("default"))))
@@ -107,7 +107,7 @@ public class EventControllerTest
 		mockMvc.perform(get("/events/99/view"))
 				.andExpect(status().isOk())
 				.andExpect(view().name("/event/viewevent"))
-				.andExpect(model().attribute("eventViewModel", hasProperty("showEditButton",   is(false))))
+				.andExpect(model().attribute("eventViewModel", hasProperty("showUpdateButton", is(false))))
 				.andExpect(model().attribute("eventViewModel", hasProperty("showDeleteButton", is(false))))
 				.andExpect(model().attribute("eventViewModel", hasProperty("message",          is("Event not found"))))
 				.andExpect(model().attribute("eventViewModel", hasProperty("messageType",      is("error"))));
@@ -131,8 +131,26 @@ public class EventControllerTest
 	}
 	
 	@Test
-	public void testUpdateEvent() throws Exception
+	public void testGetFormToUpdateEvent() throws Exception
 	{
+		// given
+		EventSvcResponse response = new EventSvcResponse();
+		response.setSuccess(true);
+		response.setEvent(new Event());
+		when(eventSvc.getEventById(anyLong())).thenReturn(response);
+
+		// expect
+		mockMvc.perform(get("/events/1/update"))
+			.andExpect(status().isOk())
+			.andExpect(view().name("/event/eventform"))
+			.andExpect(model().attributeExists("eventViewModel"))
+			.andExpect(model().attributeExists("command"));
+	}
+	
+	@Test
+	public void testPostFormToUpdateEvent() throws Exception
+	{
+		//TODO:
 	}
 	
 }

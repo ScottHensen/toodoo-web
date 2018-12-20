@@ -83,15 +83,14 @@ public class EventController
 	@GetMapping( "/events/{id}/view" )
 	public String viewEvent( @PathVariable String id, Model model )
 	{
-		EventSvcResponse eventSvcResponse = eventSvc.getEventById(Long.valueOf(id));
 		EventViewModel eventViewModel = new EventViewModel();
+		EventSvcResponse eventSvcResponse = eventSvc.getEventById(Long.valueOf(id));
 		
 		if ( ! eventSvcResponse.isSuccess() ) {
 			eventViewModel.setError(eventSvcResponse.getMessage());
 		}
 
 		eventViewModel.setEvent(eventSvcResponse.getEvent());
-		
 		model.addAttribute(EVENT_VIEW_MODEL, eventViewModel);
 		
 		return EVENT_VIEW;
@@ -111,8 +110,8 @@ public class EventController
 	@GetMapping( "/events/{id}/update" )
 	public String getUpdateEventForm( @PathVariable String id, Model model )
 	{
-		EventSvcResponse eventSvcResponse = eventSvc.getEventById(Long.valueOf(id));
 		EventViewModel eventViewModel = new EventViewModel();
+		EventSvcResponse eventSvcResponse = eventSvc.getEventById(Long.valueOf(id));
 		
 		if ( ! eventSvcResponse.isSuccess() ) {
 			eventViewModel.setError(eventSvcResponse.getMessage());
@@ -153,4 +152,5 @@ public class EventController
 		
 		return "redirect:/events/" + eventSvcResponse.getEvent().getId() + "/view";
 	}
+	
 }
