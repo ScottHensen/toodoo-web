@@ -1,149 +1,60 @@
 <!DOCTYPE html>
 <html lang = "en" 
-	  xmlns:th="http://www.thymeleaf.org" >
-	  <!-- th:replace="~{fragments/layout :: layout (~{::body}, 'home')}" -->
+	  xmlns:th="http://www.thymeleaf.org" 
+	  th:replace="~{ fragments/layout :: layout ( ~{ ::body } ) }">
 <head>
-    <meta charset="utf-8">
-	<meta name="viewport"
-          content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description"
-          content="Add/Edit a toodoo event">
-    <meta name="author"
-          content="Scott Hensen">
-          
-    <title>toodoo - add/edit Event</title>
-    
-    <link rel="icon" 
-		  th:href="@{/favicon.ico}" />		
-	<link rel="stylesheet" 
-		  th:href="@{/css/myportfolios.css}">
-	<!-- Bootstrap CSS -->
-    <link rel="stylesheet" 
-    	  href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" 
-    	  integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" 
-    	  crossorigin="anonymous">
-    <!-- 	  
-	<link rel="stylesheet" 
-		  th:href="@{/css/bootstrap.min.css}" />
-	-->
+          content="toodoo - add/edit an event">
 </head>
 <body>
-	<div class="container-fluid" style="margin-top: 20px;">
-		<!-- TODO: fragment ? -->
-		<nav class="navbar navbar-dark bg-dark">
-			<a class="navbar-brand"  
-				href='#'
-				th:href="@{'/events/view'}"> 
-			    <img src="/img/Bob2.jpg" width="30" height="30" alt="" th:href="@{/img/Bob2.jpg}">...toodoo</a>
-			<a class="btn btn-outline-info btn-sm"
-				href="#"
-				th:href="@{'/events/new'}">new
-				<i class="fas fa-plus"></i></a>
-		</nav>
-		
-		<div class="row justify-content-center">
-			<div class="card border-info mb-3" style="width: 18rem;">
-				<div class="card-body">
-					<form method="post"
-						class="needs-validation" novalidate  
-						action="#"
-						th:object="${command}" 
-						th:action="@{'/events'}">
-						
-						<!-- TODO: PROVIDE BROWSER-SIDE VALIDATION, SO CAN GET
-						           ERROR FEEDBACK, LIKE BLANK TITLE, WITHOUT
-						           HAVING TO HIT THE SERVER. -->
-						<div class="form-group"
-							th:class="${ #fields.hasErrors('title') }
-										? 'form-group is-invalid'
-										: 'form-group'">
-							<input type="hidden" th:field="*{id}" />
-							<input type="text"
-								class="card-title form-control" 
-								id="inputTitle"
-					    		th:field="*{title}"
-					    		th:errorClass="is-invalid" />
-					    	<div class="invalid-feedback"
-					    		th:if="${ #fields.hasErrors('title') }">
-					    		<ul><li th:each="err : ${ #fields.errors('title') }"
-					    				th:text="${err}" /></ul>
-					    	</div>
-							<div class="form-group row">
-								<label for="inputStatus" class="col col-form-label">
-									<b>Status</b></label>
-								<div class="col">
-									<input type="text" 
-										class="form-control" 
-										id="inputStatus" 
-										th:field="*{status}"
-										th:errorClass="is-invalid" />
-					    			<div class="invalid-feedback"
-					    				th:if="${ #fields.hasErrors('status') }">
-					    				<ul><li th:each="err : ${ #fields.errors('status') }"
-					    					th:text="${err}" /></ul>
-					    			</div>										
-								</div>
-							</div>
-							<div class="form-group row">
-								<div class="col"><b>Priority</b></div>
-								<div class="col">
-									<input type="text" 
-										class="form-control" 
-										id="inputPriority" 
-										th:field="*{priority}"
-										th:errorClass="is-invalid" />
-					    			<div class="invalid-feedback"
-					    				th:if="${ #fields.hasErrors('priority') }">
-					    				<ul><li th:each="err : ${ #fields.errors('priority') }"
-					    					th:text="${err}" /></ul>
-					    			</div>										
-								</div>
-							</div>
-							<div class="form-group row">
-								<div class="col"><b>Complete %</b></div>
-								<div class="col">
-									<input type="text" 
-										class="form-control" 
-										id="inputCompletePct" 
-										th:field="*{completePct}"
-										th:errorClass="is-invalid" />
-					    			<div class="invalid-feedback"
-					    				th:if="${ #fields.hasErrors('completePct') }">
-					    				<ul><li th:each="err : ${ #fields.errors('completePct') }"
-					    					th:text="${err}" /></ul>
-					    			</div>										
-								</div>
-							</div>
-							<div class="float-right">
-								<button class="btn btn-info btn-sm" type="submit">save</button>
-							</div>
-						</div>
-					</form>
-				</div>
+	<div class="card border-info mb-3" style="width: 18rem;">
+		<div class="card-body">
+			<form method="post"
+				class="needs-validation" novalidate  
+				action="#"
+				th:object="${command}" 
+				th:action="@{'/events'}">
 				
-			</div>
+				<!-- TODO: PROVIDE BROWSER-SIDE VALIDATION, SO CAN GET
+				           ERROR FEEDBACK, LIKE BLANK TITLE, WITHOUT
+				           HAVING TO HIT THE SERVER. -->
+				<div class="form-group"
+					th:class="${ #fields.hasErrors('title') }
+								? 'form-group is-invalid'
+								: 'form-group'">
+								
+					<input type="hidden" th:field="*{id}" />
+							    	
+		   	 		<div th:replace="fragments/inputtextbox::input ( fieldname = title )"></div>
+
+					<div class="form-group row">
+						<div class="col"><b>Status</b></div>
+						<div class="col">
+				   	 		<div th:replace="fragments/inputtextbox::input ( fieldname = status )"></div>
+						</div>
+					</div>			    	
+					
+					<div class="form-group row">
+						<div class="col"><b>Priority</b></div>
+						<div class="col">
+				   	 		<div th:replace="fragments/inputtextbox::input ( fieldname = priority )"></div>
+						</div>
+					</div>
+					
+					<div class="form-group row">
+						<div class="col"><b>Complete %</b></div>
+						<div class="col">
+				   	 		<div th:replace="fragments/inputtextbox::input ( fieldname = completePct )"></div>
+						</div>
+					</div>
+					
+					<div class="float-right">
+						<button class="btn btn-info btn-sm" type="submit">save</button>
+					</div>
+				</div>
+			</form>
 		</div>
-    </div>
-	
-	<!------------------------------------------------------------
-	  Javascript (Placed at the end of page, so it'll load faster)
-	  jQuery first, then Popper.js, then Bootstrap JS
-	 ------------------------------------------------------------->	
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" 
-    	integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" 
-    	crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" 
-    	integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" 
-    	crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" 
-    	integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" 
-    	crossorigin="anonymous"></script>
-	<!-- 	  
-	<script src="foo"
-		  th:src="@{/js/jquery-slim.min.js}"></script>
-	<script src="bar"
-		  th:src="@{/js/bootstrap.min.js}"></script>	
-	-->
-	
+	</div>
+
 </body>
 </html>
