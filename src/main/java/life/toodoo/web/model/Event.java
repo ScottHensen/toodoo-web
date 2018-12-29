@@ -17,5 +17,14 @@ public class Event
 	private String  title;
 	private Integer priority;
 	private String  status;
-	private BigDecimal completePct;
+//	@Builder.Default
+	private BigDecimal completePct; //  = BigDecimal.valueOf(0.00);
+	
+	public Boolean isComplete()	
+	{
+		if (completePct == null) {
+			return false;
+		}
+		return (completePct.doubleValue() >= 1.00);
+	}
 }

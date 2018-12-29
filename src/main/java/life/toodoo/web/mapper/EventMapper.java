@@ -31,6 +31,10 @@ public class EventMapper
 	{
 		EventViewModel eventViewModel = new EventViewModel();
 		eventViewModel.setEvent(event);
+		
+		if ( event != null ) {
+			eventViewModel.setShowCompleteButton( ! event.isComplete() );
+		}
 		return eventViewModel;
 	}
 	
@@ -38,7 +42,12 @@ public class EventMapper
 	{
 		EventViewModel eventViewModel = new EventViewModel();
 		eventViewModel.setEvent(event);
+		
+		if ( event != null ) {
+			eventViewModel.setShowCompleteButton( ! event.isComplete() );
+		}
 		eventViewModel.setEventDisplayOrder(displayOrder);
+		
 		return eventViewModel;
 	}
 

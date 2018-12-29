@@ -2,8 +2,11 @@ package life.toodoo.web.controller;
 
 import static org.hamcrest.Matchers.*;
 import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyZeroInteractions;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
@@ -14,11 +17,13 @@ import java.util.Set;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.ArgumentMatchers;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
+import life.toodoo.web.command.EventCommand;
 import life.toodoo.web.mapper.EventMapper;
 import life.toodoo.web.model.Event;
 import life.toodoo.web.service.EventSvc;
@@ -68,6 +73,8 @@ public class EventControllerTest
 				.andExpect(model().attribute("eventsViewModel", hasProperty("eventViewModels", hasItem(hasProperty("message",          is("")        )))))
 				.andExpect(model().attribute("eventsViewModel", hasProperty("eventViewModels", hasItem(hasProperty("messageType",      is("default") )))))
 				;
+		
+		verify(eventSvc).getEvents();
 	}
 	
 	@Test
@@ -90,6 +97,8 @@ public class EventControllerTest
 				.andExpect(model().attribute("eventViewModel", hasProperty("message",          is(""))))
 				.andExpect(model().attribute("eventViewModel", hasProperty("messageType",      is("default"))))
 				;
+		
+		verify(eventSvc).getEventById(anyLong());
 	}
 	
 	@Test
@@ -111,6 +120,8 @@ public class EventControllerTest
 				.andExpect(model().attribute("eventViewModel", hasProperty("showDeleteButton", is(false))))
 				.andExpect(model().attribute("eventViewModel", hasProperty("message",          is("Event not found"))))
 				.andExpect(model().attribute("eventViewModel", hasProperty("messageType",      is("error"))));
+		
+		verify(eventSvc).getEventById(anyLong());
 	}
 	
 	@Test
@@ -128,6 +139,8 @@ public class EventControllerTest
 		mockMvc.perform(get("/events/x/view"))
 				.andExpect(status().isBadRequest())
 				.andExpect(view().name("400error"));
+		
+		verifyZeroInteractions(eventSvc);
 	}
 	
 	@Test
@@ -140,17 +153,96 @@ public class EventControllerTest
 		when(eventSvc.getEventById(anyLong())).thenReturn(response);
 
 		// expect
-		mockMvc.perform(get("/events/1/update"))
+		mockMvc.perform( get("/events/1/update"))
 			.andExpect(status().isOk())
 			.andExpect(view().name("/event/eventform"))
 			.andExpect(model().attributeExists("eventViewModel"))
 			.andExpect(model().attributeExists("command"));
+		
+		verify(eventSvc).getEventById(anyLong());
 	}
 	
 	@Test
-	public void testPostFormToUpdateEvent() throws Exception
+	public void testPostInvalidFormToUpdateEvent() throws Exception
 	{
-		//TODO:
+		// given
+		EventSvcResponse response = new EventSvcResponse();
+		response.setSuccess(true);
+		response.setEvent(new Event());
+
+		when(eventSvc.saveEvent(ArgumentMatchers.any())).thenReturn(response);
+		
+		// expect
+		mockMvc.perform( post("/events") )
+			.andExpect(status().is2xxSuccessful())
+			.andExpect(view().name("/event/eventform"));
+		
+		verifyZeroInteractions(eventSvc);	
+	}
+	
+	@Test
+	public void testPostValidFormToUpdateEvent() throws Exception
+	{
+		// given
+		Event event = Event.builder().id(1L).title("event1").priority(1).status("In Progress").completePct(BigDecimal.valueOf(50.0)).build();
+		
+		EventSvcResponse response = new EventSvcResponse();
+		response.setSuccess(true);
+		response.setEvent(event);
+
+		when(eventSvc.updateEvent(ArgumentMatchers.any())).thenReturn(response);
+		
+		// expect
+		mockMvc.perform( post("/events")
+							.param("id", "1")
+							.param("title", "testUpdate")
+						)
+			.andExpect(status().is3xxRedirection())
+			.andExpect(view().name("redirect:/events/1/view"));
+		
+		verify(eventSvc).updateEvent(ArgumentMatchers.any());
+	}
+	
+	@Test
+	public void testPostValidFormToCreateEvent() throws Exception
+	{
+		// given
+		Event event = Event.builder().id(1L).title("event1").priority(1).status("In Progress").completePct(BigDecimal.valueOf(50.0)).build();
+		
+		EventSvcResponse response = new EventSvcResponse();
+		response.setSuccess(true);
+		response.setEvent(event);
+
+		when(eventSvc.saveEvent(ArgumentMatchers.any())).thenReturn(response);
+		
+		// expect
+		mockMvc.perform( post("/events")
+							.param("title", "testCreate")
+						)
+			.andExpect(status().is3xxRedirection())
+			.andExpect(view().name("redirect:/events/1/view"));
+		
+		verify(eventSvc).saveEvent(ArgumentMatchers.any());
+	}
+	
+	@Test
+	public void testDeleteEvent() throws Exception
+	{
+		// given
+		Event event = Event.builder().id(1L).title("event1").priority(1).status("In Progress").completePct(BigDecimal.valueOf(50.0)).build();
+		
+		EventSvcResponse response = new EventSvcResponse();
+		response.setSuccess(true);
+		response.setEvent(event);
+
+		when(eventSvc.deleteEventById(ArgumentMatchers.anyLong())).thenReturn(response);
+		
+		// expect
+		mockMvc.perform( get("/events/1/delete"))
+			.andExpect(status().is3xxRedirection())
+			.andExpect(view().name("redirect:/events/view"));
+		
+		verify(eventSvc).deleteEventById(ArgumentMatchers.anyLong());
 	}
 	
 }

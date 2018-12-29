@@ -11,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -86,11 +87,13 @@ public class EventController
 		EventViewModel eventViewModel = new EventViewModel();
 		EventSvcResponse eventSvcResponse = eventSvc.getEventById(Long.valueOf(id));
 		
-		if ( ! eventSvcResponse.isSuccess() ) {
+		if ( eventSvcResponse.isSuccess() ) {
+			eventViewModel = eventMapper.mapEventToEventViewModel(eventSvcResponse.getEvent());
+		}
+		else {
 			eventViewModel.setError(eventSvcResponse.getMessage());
 		}
-
-		eventViewModel.setEvent(eventSvcResponse.getEvent());
+		
 		model.addAttribute(EVENT_VIEW_MODEL, eventViewModel);
 		
 		return EVENT_VIEW;
@@ -153,4 +156,19 @@ public class EventController
 		return "redirect:/events/" + eventSvcResponse.getEvent().getId() + "/view";
 	}
 	
+	
+	@GetMapping( "/events/{id}/delete" )
+	public String deleteEvent( @PathVariable String id, Model model )
+	{
+		EventViewModel eventViewModel = new EventViewModel();
+		EventSvcResponse eventSvcResponse = eventSvc.deleteEventById(Long.valueOf(id));
+		
+		//TODO: this is dumb. display error on page that posted this request.
+		if ( ! eventSvcResponse.isSuccess() ) {
+			eventViewModel.setError(eventSvcResponse.getMessage());
+		}
+		
+		return "redirect:/events/view";
+
+	}
 }

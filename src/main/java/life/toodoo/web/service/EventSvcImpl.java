@@ -105,13 +105,6 @@ public class EventSvcImpl implements EventSvc
 	}
 
 	@Override
-	public EventCommand getEventCommandById(Long id) 
-	{
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
 	public EventSvcResponse updateEvent(Event event) 
 	{
 		EventSvcResponse response = new EventSvcResponse();
@@ -169,4 +162,31 @@ public class EventSvcImpl implements EventSvc
 		return response;
 	}
 
+	@Override
+	public EventSvcResponse deleteEventById(Long id)
+	{
+		EventSvcResponse response = new EventSvcResponse();
+		
+		ResponseEntity<EventDTO> restResponse = 
+				restTemplate.exchange(URL+"/"+id, HttpMethod.DELETE, null, EventDTO.class);
+
+		if ( restResponse.getStatusCode().is2xxSuccessful() )
+		{
+			response.setSuccess(true);
+			response.setEvent(new Event());
+		}
+		else
+		{
+			String returnMsg = restResponse.getStatusCode().name() 
+							 + " error encountered when deleting event #" + id.toString() + ".";
+			log.error( returnMsg );			
+
+			response.setMessage(returnMsg);
+			response.setSuccess(false);
+			response.setEvent(new Event());
+		}
+		
+		response.setCode(restResponse.getStatusCodeValue());
+		return response;		
+	}
 }
