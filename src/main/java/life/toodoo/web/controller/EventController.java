@@ -163,7 +163,7 @@ public class EventController
 		EventViewModel eventViewModel = new EventViewModel();
 		EventSvcResponse eventSvcResponse = eventSvc.deleteEventById(Long.valueOf(id));
 		
-		//TODO: this is dumb. display error on page that posted this request.
+		//TODO: this is dumb. display error msg on the page that posted this request.
 		if ( ! eventSvcResponse.isSuccess() ) {
 			eventViewModel.setError(eventSvcResponse.getMessage());
 		}

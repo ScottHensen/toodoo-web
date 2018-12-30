@@ -6,25 +6,23 @@
 		<div class="card border-info mb-3" style="width: 18rem;">
 			<div class="card-body">
 				<div class="row">
-					<div class="col-10"><h5 class="card-title"
-					    th:text="${viewModel.event.title}">title</h5></div>
-					<div class="col-2"><div th:replace="fragments/button::button ( viewModel = ${viewModel} )"></div></div>
+					<div class="col-10"><h5 class="card-title" th:text="${viewModel.event.title}">task</h5></div>
+					<div class="col-2"><div th:replace="fragments/buttons::completebutton ( viewModel = ${viewModel} )"></div></div>
 				</div>
 				<div class="row">
 					<div class="col"><b>Status</b></div>
-					<div class="col"><p th:text="${viewModel.event.status}">foo</p></div>
+					<div class="col"><p th:text="${viewModel.event.status}">none</p></div>
 				</div>
 				<div class="row">
 					<div class="col"><b>Priority</b></div>
-					<div class="col"><p th:text="${viewModel.event.priority}">foo</p></div>
+					<div class="col"><p th:text="${viewModel.event.priority}">none</p></div>
 				</div>
 				<div class="row">
 					<div class="col"><b>Complete</b></div>
-					<div class="col"><p th:text="${viewModel.event.completePct}">foo</p></div>
+					<div class="col"><p th:text="${viewModel.event.completePct}">none</p></div>
 				</div>
 				
-				<div th:replace="fragments/buttonbar::buttonbar ( viewModel = ${viewModel} )"></div> 
-
+				<div th:replace="fragments/buttons::buttonbar ( viewModel = ${viewModel} )"></div> 
 			</div>
 
 			<div th:if="${viewModel.hasError}">

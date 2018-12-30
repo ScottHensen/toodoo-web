@@ -9,12 +9,9 @@
 </head>
 <body>
 	<div class="card-deck" >
-		<div class="row "
-			th:each="eventViewModel : ${eventsViewModel.eventViewModels}">
+		<div class="row" th:each="eventViewModel : ${eventsViewModel.eventViewModels}">
 			<div class="col-sm-6">
-			
 				<div th:replace="fragments/eventcard::card ( viewModel = ${eventViewModel} )"></div>
-
 			</div>
 		</div>
 	</div>
