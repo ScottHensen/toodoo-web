@@ -13,10 +13,10 @@ import lombok.NoArgsConstructor;
 @Builder
 public class Event 
 {
-	private Long id;
-	private String  title;
-	private Integer priority;
-	private String  status;
+	private Long       id;
+	private String     title;
+	private Integer    priority;
+	private String     status;
 	private BigDecimal completePct; 
 
 	
